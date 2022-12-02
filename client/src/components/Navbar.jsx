@@ -5,7 +5,7 @@ import { IconContext } from "react-icons";
 
 const Navbar = () => {
   return (
-    <div className="flex justify-between items-center bg-white w-full px-32 h-20">
+    <div className="flex justify-between items-center bg-white w-full px-32 h-20 overflow-x-hidden">
       {/* categories */}
       <div className="">
         <ul className="flex">
