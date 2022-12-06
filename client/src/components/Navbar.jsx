@@ -1,9 +1,12 @@
-import React from "react";
+import React, {useState} from "react";
 import { Link } from "react-router-dom";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { IconContext } from "react-icons";
+import Cart from "./Cart";
 
 const Navbar = () => {
+  const [open, setOpen] = useState(false)
+
   return (
     <div className="flex justify-between items-center bg-white w-full px-32 h-20 overflow-x-hidden">
       {/* categories */}
@@ -41,7 +44,7 @@ const Navbar = () => {
         </ul>
 
         {/*  icons */}
-        <div className="ml-20 relative">
+        <div className="ml-20 relative" onClick={() => setOpen(!open)}>
           <IconContext.Provider value={{ color: "#555", size: "30px" }}>
             <AiOutlineShoppingCart />
           </IconContext.Provider>
@@ -50,7 +53,9 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+      {open && <Cart />}
     </div>
+
   );
 };
 
