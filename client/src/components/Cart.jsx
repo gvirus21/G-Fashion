@@ -4,7 +4,7 @@ import { IconContext } from "react-icons";
 
 const Cart = () => {
   return (
-    <div className="flex flex-col justify-between h-[18rem] w-[32rem] absolute top-16 right-16 bg-white shadow-lg rounded-md">
+    <div className="flex flex-col justify-between h-[18rem] w-[32rem] absolute top-16 right-16 bg-white shadow-lg rounded-md z-50">
       <div className="flex justify-between px-8 py-5">
         <img
           className="h-32 w-20 object-cover"
