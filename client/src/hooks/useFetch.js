@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { makeRequest } from "../makeRequest";
 
 const useFetch = (url) => {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 

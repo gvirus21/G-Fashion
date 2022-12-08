@@ -4,14 +4,11 @@ import Card from "./Card";
 
 const List = ({ subCats, maxPrice, sort, categoryId }) => {
   const { products, loading, error } = useFetch(
-    `/products?populate=*&[filters][categories][id]=${categoryId}${subCats.map(
-      (item) =>
-        `&[filters][sub_categories][id][$eq]=${item}&[filters][price][$lte]=${maxPrice}&sort=price:${sort}`
-    )}`
+    `/products?populate=*&[filters][categories][id]=${categoryId}`
   );
 
   //filters not working
-  console.log(error)
+  console.log(error);
 
   return (
     <div className="mx-auto max-w-[70rem] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
