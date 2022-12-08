@@ -1,11 +1,14 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { IconContext } from "react-icons";
 import Cart from "./Cart";
+import { useDispatch, useSelector } from "react-redux";
 
 const Navbar = () => {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
+  const products = useSelector((state) => state.cart.products);
+  const dispatch = useDispatch();
 
   return (
     <div className="flex justify-between items-center bg-white w-full px-32 h-20 overflow-x-hidden">
@@ -48,14 +51,13 @@ const Navbar = () => {
           <IconContext.Provider value={{ color: "#555", size: "30px" }}>
             <AiOutlineShoppingCart />
           </IconContext.Provider>
-          <div className="bg-blue-500 flex justify-center items-center h-5 w-5 rounded-full absolute -top-2 -right-2">
-            <span className="text-white">0</span>
+          <div className="bg-blue-500 flex justify-center items-center px-2 py-0 rounded-full absolute -top-2 -right-2">
+            <span className="text-white">{products.length}</span>
           </div>
         </div>
       </div>
       {open && <Cart />}
     </div>
-
   );
 };
 
