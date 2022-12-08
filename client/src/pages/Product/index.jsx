@@ -2,51 +2,47 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
 
-const images = [
-  "https://images.pexels.com/photos/9252069/pexels-photo-9252069.png?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-  "https://images.pexels.com/photos/12725050/pexels-photo-12725050.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-];
 
 const Product = () => {
   const id = useParams().id;
-  const [currentImage, setCurrentImage] = useState(images[0]);
+  const [currentImage, setCurrentImage] = useState("img1");
   const [itemCount, setItemCount] = useState(1);
 
   const { data, loading, error } = useFetch(`/products/${id}?populate=*`);
 
+  console.log(data);
+
   return (
-    <div className="flex h-[90vh]">
+    <div>
+    {loading ? ("loading") : (<div className="flex h-[90vh]">
       <div className="flex flex-col items-center w-[15vw] shadow-md pt-5">
         <img
           className="h-40 w-32 my-3 object-cover"
-          src={data?.attributes?.img1?.data?.attributes?.url}
+          src={process.env.REACT_APP_UPLOAD_URL + data?.attributes?.img1?.data?.attributes?.url}
           alt="product"
-          onClick={() => setCurrentImage(images[0])}
+          onClick={() => setCurrentImage('img1')}
         />
         <img
           className="h-40 w-32 my-5 object-cover"
-          src={images[1]}
+          src={process.env.REACT_APP_UPLOAD_URL + data?.attributes?.img2?.data?.attributes?.url}
           alt="product"
-          onClick={() => setCurrentImage(images[1])}
+          onClick={() => setCurrentImage('img2')}
         />
       </div>
       <div className="flex">
         <div className="flex justify-center pt-10 h-full w-[45vw]">
           {/* img */}
           <img
-            className="h-[35rem] w-[30rem] bg-red-400 object-cover"
-            src={currentImage}
+            className="h-[35rem] w-[30rem] object-cover"
+            src={process.env.REACT_APP_UPLOAD_URL + data?.attributes?.[currentImage]?.data?.attributes?.url}
             alt="product"
           />
         </div>
         <div className="h-[100vh] w-[40vw] py-[2rem] pl-5">
-          <h1 className="text-xl font-semibold">Long Sleeve Graphic T-shirt</h1>
-          <p className="mt-5 text-xl">$ 19.9</p>
+          <h1 className="text-xl font-semibold">{data?.attributes?.title}</h1>
+          <p className="mt-5 text-xl">$ {data?.attributes?.price}</p>
           <p className="w-[30rem] mt-8">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quo
-            nostrum recusandae alias quaerat dolorem accusamus dolore officiis
-            atque saepe laborum ratione, est a quisquam ex distinctio natus
-            eligendi suscipit aliquid?
+          {data?.attributes?.desc}
           </p>
           <div className="flex items-center my-5 ml-2">
             <button
@@ -84,7 +80,7 @@ const Product = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div>)}</div>
   );
 };
 
