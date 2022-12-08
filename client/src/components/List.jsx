@@ -1,48 +1,29 @@
 import React from "react";
-import Card from './Card'
+import useFetch from "../hooks/useFetch";
+import Card from "./Card";
 
-const List = () => {
-  const products = [
-    {
-      id: 1,
-      title: "Nike Orange sneakers",
-      img1: "https://images.pexels.com/photos/9252069/pexels-photo-9252069.png?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-      img2: "https://images.pexels.com/photos/12725050/pexels-photo-12725050.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-      oldPrice: 18,
-      price: 15,
-    },
-    {
-      id: 2,
-      title: "Lino Blue bagpack",
-      img1: "https://images.pexels.com/photos/2905238/pexels-photo-2905238.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-      img2: "https://images.pexels.com/photos/10801850/pexels-photo-10801850.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-      oldPrice: 16,
-      price: 10,
-    },
-    {
-      id: 3,
-      title: "Groop Yellow hoodie",
-      img1: "https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-      img2: "https://images.pexels.com/photos/6322735/pexels-photo-6322735.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-      oldPrice: 35,
-      price: 29,
-    },
-    {
-      id: 4,
-      title: "Jenkis Gray denim",
-      img1: "https://images.pexels.com/photos/2853534/pexels-photo-2853534.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-      img2: "https://images.pexels.com/photos/4306567/pexels-photo-4306567.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-      oldPrice: 47,
-      price: 39,
-    },
-  ];
+const List = ({ subCats, maxPrice, sort, categoryId }) => {
+  const { products, loading, error } = useFetch(
+    `/products?populate=*&[filters][categories][id]=${categoryId}${subCats.map(
+      (item) =>
+        `&[filters][sub_categories][id][$eq]=${item}&[filters][price][$lte]=${maxPrice}&sort=price:${sort}`
+    )}`
+  );
 
+  //filters not working
+  console.log(error)
 
-  return <div className="mx-auto max-w-[70rem] flex justify-between ">
-    {
-        products.map((product) => <Card product={product} />)
-    }
-  </div>;
+  return (
+    <div className="mx-auto max-w-[70rem] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+      {error
+        ? "Something went wrong"
+        : loading
+        ? "loading"
+        : products?.map((product) => (
+            <Card product={product} key={products.id} />
+          ))}
+    </div>
+  );
 };
 
 export default List;

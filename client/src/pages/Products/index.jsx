@@ -1,11 +1,28 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import List from "../../components/List";
+import useFetch from "../../hooks/useFetch";
 
 const Products = () => {
   const categoryId = parseInt(useParams().id);
   const [maxPrice, setMaxPrice] = useState(1000);
   const [sort, setSort] = useState(null);
+  const [selectedSubCats, setSelectedSubCats] = useState([]);
+
+  const { products, loading, error } = useFetch(
+    `/sub-categories?[filters][categories][id][$eq]=${categoryId}`
+  );
+
+  const handleChange = (e) => {
+    const value = e.target.value;
+    const isChecked = e.target.checked;
+
+    setSelectedSubCats(
+      isChecked
+        ? [...selectedSubCats, value]
+        : selectedSubCats.filter((item) => item !== value)
+    );
+  };
 
   return (
     <div className="flex h-[130vh] relative">
@@ -13,30 +30,19 @@ const Products = () => {
       <div className="w-[20vw] h-[50vh] min-w-[18rem] pl-8 pt-10 sticky top-0">
         <div>
           <h1 className="text-lg font-semibold my-5">Product Categories</h1>
-          <div className="pl-4">
-            <input type="checkbox" id="1" value={1} />
-            <label className="ml-2" htmlFor="1">
-              T-Shirts
-            </label>
-          </div>
-          <div className="pl-4">
-            <input type="checkbox" id="2" value={2} />
-            <label className="ml-2" htmlFor="2">
-              Skirts
-            </label>
-          </div>
-          <div className="pl-4">
-            <input type="checkbox" id="3" value={3} />
-            <label className="ml-2" htmlFor="3">
-              Shirts
-            </label>
-          </div>
-          <div className="pl-4">
-            <input type="checkbox" id="4" value={4} />
-            <label className="ml-2" htmlFor="4">
-              Shoes
-            </label>
-          </div>
+          {products?.map((item) => (
+            <div key={item.id} className="pl-4">
+              <input
+                type="checkbox"
+                id={item.id}
+                value={item.id}
+                onChange={(e) => handleChange(e)}
+              />
+              <label className="ml-2" htmlFor={item.id}>
+                {item.attributes.title}
+              </label>
+            </div>
+          ))}
         </div>
         <div>
           <h1 className="text-lg font-semibold my-5">Filter by Price</h1>
@@ -72,9 +78,9 @@ const Products = () => {
               id="dsc"
               value="dsc"
               name="price"
-              onChange={() => setSort("dsc")}
+              onChange={() => setSort("desc")}
             />
-            <label className="ml-2" htmlFor="dsc">
+            <label className="ml-2" htmlFor="desc">
               Price (Highest first)
             </label>
           </div>
@@ -91,7 +97,12 @@ const Products = () => {
         </div>
 
         <div className="mt-20">
-          <List categoryId={categoryId} maxPrice={maxPrice} sort={sort} />
+          <List
+            categoryId={categoryId}
+            maxPrice={maxPrice}
+            sort={sort}
+            subCats={selectedSubCats}
+          />
         </div>
       </div>
     </div>
