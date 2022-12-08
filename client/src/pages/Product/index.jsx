@@ -1,19 +1,25 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
+import useFetch from "../../hooks/useFetch";
 
 const images = [
   "https://images.pexels.com/photos/9252069/pexels-photo-9252069.png?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
   "https://images.pexels.com/photos/12725050/pexels-photo-12725050.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
 ];
+
 const Product = () => {
+  const id = useParams().id;
   const [currentImage, setCurrentImage] = useState(images[0]);
   const [itemCount, setItemCount] = useState(1);
+
+  const { data, loading, error } = useFetch(`/products/${id}?populate=*`);
 
   return (
     <div className="flex h-[90vh]">
       <div className="flex flex-col items-center w-[15vw] shadow-md pt-5">
         <img
           className="h-40 w-32 my-3 object-cover"
-          src={images[0]}
+          src={data?.attributes?.img1?.data?.attributes?.url}
           alt="product"
           onClick={() => setCurrentImage(images[0])}
         />
@@ -59,7 +65,6 @@ const Product = () => {
           </div>
           <div className="flex flex-col w-96">
             <button className="bg-blue-500 hover:bg-blue-600 cursor-pointer text-white px-5 py-2 rounded-md my-2">
-
               Add to cart
             </button>
             <button className="bg-blue-700 hover:bg-blue-800 cursor-pointer text-white px-5 py-2 rounded-md my-1">

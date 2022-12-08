@@ -9,7 +9,7 @@ const Products = () => {
   const [sort, setSort] = useState(null);
   const [selectedSubCats, setSelectedSubCats] = useState([]);
 
-  const { products, loading, error } = useFetch(
+  const { data, loading, error } = useFetch(
     `/sub-categories?[filters][categories][id][$eq]=${categoryId}`
   );
 
@@ -30,7 +30,7 @@ const Products = () => {
       <div className="w-[20vw] h-[50vh] min-w-[18rem] pl-8 pt-10 sticky top-0">
         <div>
           <h1 className="text-lg font-semibold my-5">Product Categories</h1>
-          {products?.map((item) => (
+          {data?.map((item) => (
             <div key={item.id} className="pl-4">
               <input
                 type="checkbox"
